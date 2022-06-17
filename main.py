@@ -3,17 +3,18 @@
 
 
 import os
+import json
 import gspread
 from telegram import *
 from telegram.ext import *
 from dotenv import load_dotenv
-# import responses
+import accounts
 load_dotenv()
 
 
 gc = gspread.service_account(filename=os.getenv("CREDENTIALS_FILE"))
 sh = gc.open_by_key(os.getenv("SPREADSHEET_KEY"))
-worksheet = sh.worksheet(os.getenv("SHEET_NAME"))
+worksheet = sh.worksheet(os.getenv("TRANSACTION_SHEET"))
 
 
 def start_command(update, context):
@@ -21,8 +22,8 @@ def start_command(update, context):
 
 
 def help_command(update, context):
-    update.message.reply_text("Please type: \
-                              \n\catat_keuangan Type#Date#Account#Amount#Notes#Category")
+    update.message.reply_text("Please type: \n\input_trx %s" 
+                           % ('#').join(str(column) for column in json.loads(os.getenv("TRANSACTION_COLUMNS"))))
 
 
 def handle_message(update, context):
@@ -31,17 +32,16 @@ def handle_message(update, context):
     # update.message.reply_text(response)
 
 
-def catat_keuangan(update, context):
-    note = context.args[:]
-    if len(note) < 1:
-        update.message.reply_text("Wrong format! Please type: \
-                                  \n\catat_keuangan Type#Date#Account#Amount#Notes#Category")
+def transactions(update, context):
+    transaction = context.args[:]
+    if len(transaction) < 1:
+        update.message.reply_text("Wrong format! Please type: \n\input_trx %s"
+                               % ('#').join(str(column) for column in json.loads(os.getenv("TRANSACTION_COLUMNS"))))
     else:
-        note = (' ').join(str(i) for i in note)
-        notes = note.split('#')
-        worksheet.append_row(notes)
-        # responses.logic(notes)
-        update.message.reply_text("sudah tercatat")
+        transaction = (' ').join(str(i) for i in transaction).split('#')
+        worksheet.append_row(transaction)
+        accounts.update_balance(transaction)
+        update.message.reply_text("Transaction has been recorded")
 
 
 def error_message(update, context):
@@ -55,7 +55,7 @@ def main():
 
     dp.add_handler(CommandHandler("start", start_command))
     dp.add_handler(CommandHandler("help", help_command))
-    dp.add_handler(CommandHandler("catat_keuangan", catat_keuangan))
+    dp.add_handler(CommandHandler("input_trx", transactions))
 
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 
