@@ -44,6 +44,11 @@ def transactions(update, context):
         update.message.reply_text("Transaction has been recorded")
 
 
+def see_balance(update, context):
+    accounts.see_balance()
+    update.message.reply_photo(open(os.getenv("BALANCE_PATH"), "rb"))
+
+
 def error_message(update, context):
     print(f"Update {update} caused error {context.error}")
 
@@ -56,6 +61,7 @@ def main():
     dp.add_handler(CommandHandler("start", start_command))
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("input_trx", transactions))
+    dp.add_handler(CommandHandler("balance", see_balance))
 
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 
