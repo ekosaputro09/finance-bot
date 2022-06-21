@@ -53,6 +53,4 @@ def see_balance():
     balance = pd.DataFrame(worksheet.get(os.getenv("ACCOUNT_DATARANGE")), columns=json.loads(os.getenv("ACCOUNT_COLUMNS")))
     balance.drop(columns=["Account Type", "Initial Balance"], axis=1, inplace=True)
     balance['Current Balance'] = ["Rp{:,}".format(int(nominal)) for nominal in balance['Current Balance']]
-    print(balance)
-
     dfi.export(balance, os.getenv("BALANCE_PATH"))
