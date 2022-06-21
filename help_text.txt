@@ -1,0 +1,4 @@
+Please type:
+
+\input_trx -> to get format and sample of adding a transaction
+\balance   -> to see the updated account balance

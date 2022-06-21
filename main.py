@@ -22,8 +22,11 @@ def start_command(update, context):
 
 
 def help_command(update, context):
-    update.message.reply_text("Please type: \n\input_trx %s" 
-                           % ('#').join(str(column) for column in json.loads(os.getenv("TRANSACTION_COLUMNS"))))
+    file = open("help_text.txt")
+    texts = file.read().splitlines()
+    file.close()
+
+    update.message.reply_text(('\n').join(text for text in texts))
 
 
 def handle_message(update, context):
@@ -35,8 +38,9 @@ def handle_message(update, context):
 def transactions(update, context):
     transaction = context.args[:]
     if len(transaction) < 1:
-        update.message.reply_text("Wrong format! Please type: \n\input_trx %s"
-                               % ('#').join(str(column) for column in json.loads(os.getenv("TRANSACTION_COLUMNS"))))
+        update.message.reply_text("Please type:\n\input_trx %s \n\nexample:\n\input_trx %s"
+                               % (('#').join(str(column) for column in json.loads(os.getenv("TRANSACTION_COLUMNS"))),
+                                  "Pemasukan#2022-01-01 10:00#Bank Mandiri#10000000#Gaji#Gaji Eko#Gaji Januari Eko"))
     else:
         transaction = (' ').join(str(i) for i in transaction).split('#')
         worksheet.append_row(transaction)
