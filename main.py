@@ -53,6 +53,11 @@ def see_balance(update, context):
     update.message.reply_photo(open(os.getenv("BALANCE_PATH"), "rb"))
 
 
+def list_category(update, context):
+    accounts.list_category()
+    update.message.reply_photo(open(os.getenv("CATEGORIES_PATH"), "rb"))
+
+
 def error_message(update, context):
     print(f"Update {update} caused error {context.error}")
 
@@ -66,6 +71,7 @@ def main():
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("input_trx", transactions))
     dp.add_handler(CommandHandler("balance", see_balance))
+    dp.add_handler(CommandHandler("categories", list_category))
 
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 

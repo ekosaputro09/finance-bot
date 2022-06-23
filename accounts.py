@@ -16,7 +16,6 @@ load_dotenv()
 gc = gspread.service_account(filename=os.getenv("CREDENTIALS_FILE"))
 sh = gc.open_by_key(os.getenv("SPREADSHEET_KEY"))
 worksheet = sh.worksheet(os.getenv("ACCOUNT_SHEET"))
-# rekening = pd.DataFrame(worksheet.get('A4:D22'), columns=json.loads(os.getenv("ACCOUNT_COLUMNS")))
 
 
 def update_balance(transaction):
@@ -54,3 +53,9 @@ def see_balance():
     balance.drop(columns=["Account Type", "Initial Balance"], axis=1, inplace=True)
     balance['Current Balance'] = ["Rp{:,}".format(int(nominal)) for nominal in balance['Current Balance']]
     dfi.export(balance, os.getenv("BALANCE_PATH"))
+
+
+def list_category():
+
+    categories = pd.DataFrame(worksheet.get(os.getenv("CATEGORY_DATARANGE")), columns=json.loads(os.getenv("CATEGORY_COLUMNS")))
+    dfi.export(categories, os.getenv("CATEGORIES_PATH"))
