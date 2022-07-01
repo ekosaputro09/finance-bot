@@ -9,6 +9,7 @@ from telegram import *
 from telegram.ext import *
 from dotenv import load_dotenv
 import accounts
+import budgets
 load_dotenv()
 
 
@@ -45,6 +46,7 @@ def transactions(update, context):
         transaction = (' ').join(str(i) for i in transaction).split('#')
         worksheet.append_row(transaction)
         accounts.update_balance(transaction)
+        budgets.update_budget(transaction)
         update.message.reply_text("Transaction has been recorded")
 
 
@@ -54,7 +56,7 @@ def see_balance(update, context):
 
 
 def list_category(update, context):
-    accounts.list_category()
+    budgets.list_category()
     update.message.reply_photo(open(os.getenv("CATEGORIES_PATH"), "rb"))
 
 

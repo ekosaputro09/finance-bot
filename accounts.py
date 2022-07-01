@@ -53,9 +53,3 @@ def see_balance():
     balance.drop(columns=["Account Type", "Initial Balance"], axis=1, inplace=True)
     balance['Current Balance'] = ["Rp{:,}".format(int(nominal)) for nominal in balance['Current Balance']]
     dfi.export(balance, os.getenv("BALANCE_PATH"))
-
-
-def list_category():
-
-    categories = pd.DataFrame(worksheet.get(os.getenv("CATEGORY_DATARANGE")), columns=json.loads(os.getenv("CATEGORY_COLUMNS")))
-    dfi.export(categories, os.getenv("CATEGORIES_PATH"))
