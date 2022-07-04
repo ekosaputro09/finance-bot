@@ -55,6 +55,12 @@ def see_balance(update, context):
     update.message.reply_photo(open(os.getenv("BALANCE_PATH"), "rb"))
 
 
+def see_total_balance(update, context):
+    grand_total = accounts.see_total_balance()
+    update.message.reply_photo(open(os.getenv("TOTAL_BALANCE_PATH"), "rb"))
+    update.message.reply_text("Grand Total = Rp{:,}".format(int(grand_total)))
+
+
 def list_category(update, context):
     budgets.list_category()
     update.message.reply_photo(open(os.getenv("CATEGORIES_PATH"), "rb"))
@@ -73,6 +79,7 @@ def main():
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("input_trx", transactions))
     dp.add_handler(CommandHandler("balance", see_balance))
+    dp.add_handler(CommandHandler("total_balance", see_total_balance))
     dp.add_handler(CommandHandler("categories", list_category))
 
     dp.add_handler(MessageHandler(Filters.text, handle_message))

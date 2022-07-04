@@ -51,5 +51,21 @@ def see_balance():
 
     balance = pd.DataFrame(worksheet.get(os.getenv("ACCOUNT_DATARANGE")), columns=json.loads(os.getenv("ACCOUNT_COLUMNS")))
     balance.drop(columns=["Account Type", "Initial Balance"], axis=1, inplace=True)
-    balance['Current Balance'] = ["Rp{:,}".format(int(nominal)) for nominal in balance['Current Balance']]
+    balance['Current Balance'] = balance['Current Balance'].map(lambda x: "Rp{:,}".format(int(x)))
     dfi.export(balance, os.getenv("BALANCE_PATH"))
+
+
+def see_total_balance():
+    balance = pd.DataFrame(worksheet.get(os.getenv("ACCOUNT_DATARANGE")), columns=json.loads(os.getenv("ACCOUNT_COLUMNS")))
+    balance.rename(columns={'Current Balance': 'Total Balance'}, inplace=True)
+
+    balance['Total Balance'] = balance['Total Balance'].astype(int)
+    total_balance = balance.groupby("Account Type").sum()[['Total Balance']]
+    grand_total = total_balance['Total Balance'].sum()
+    total_balance['Total Balance (%)'] = total_balance['Total Balance'].map(lambda x: x/grand_total)
+ 
+    total_balance['Total Balance'] = total_balance['Total Balance'].map("Rp{:,}".format)
+    total_balance['Total Balance (%)'] = total_balance['Total Balance (%)'].map("{:.2%}".format)
+    dfi.export(total_balance, os.getenv("TOTAL_BALANCE_PATH"))
+
+    return grand_total
