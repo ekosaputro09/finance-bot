@@ -39,9 +39,9 @@ def handle_message(update, context):
 def transactions(update, context):
     transaction = context.args[:]
     if len(transaction) < 1:
-        update.message.reply_text("Please type:\n\input_trx %s \n\nexample:\n\input_trx %s"
+        update.message.reply_text("Please type:\n/input_trx %s \n\nexample:\n/input_trx %s"
                                % (('#').join(str(column) for column in json.loads(os.getenv("TRANSACTION_COLUMNS"))),
-                                  "Pemasukan#2022-01-01 10:00#Bank Mandiri#10000000#Gaji#Gaji Eko#Gaji Januari Eko"))
+                                  "Pengeluaran#2022-01-01 10:00#Dompet Novi#50000#Makan Minum#Jajan#es krim"))
     else:
         transaction = (' ').join(str(i) for i in transaction).split('#')
         worksheet.append_row(transaction)
