@@ -30,8 +30,10 @@ def update_budget(transaction):
 
     if trx_data["Type"] == "Pengeluaran":
         worksheet.update_cell(subcat.row, subcat.col+2, int(worksheet.cell(subcat.row, subcat.col+2).value) + int(amount))
-    
-    
+    elif trx_data["Type"] == "Pemasukan":
+        worksheet.update_cell(subcat.row, subcat.col+2, int(worksheet.cell(subcat.row, subcat.col+2).value) + int(amount))
+
+
 def list_category():
 
     categories = pd.DataFrame(worksheet.get(os.getenv("CATEGORY_DATARANGE")), columns=json.loads(os.getenv("CATEGORY_COLUMNS")))
