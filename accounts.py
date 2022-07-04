@@ -8,6 +8,7 @@ import json
 import gspread
 import pandas as pd
 import dataframe_image as dfi
+import matplotlib.pyplot as plt
 from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
@@ -61,9 +62,13 @@ def see_total_balance():
 
     balance['Total Balance'] = balance['Total Balance'].astype(int)
     total_balance = balance.groupby("Account Type").sum()[['Total Balance']]
-    grand_total = total_balance['Total Balance'].sum()
+    total_balance["Total Balance"] = total_balance["Total Balance"].map(lambda x: x*(-1) if x < 0 else x*1)
+    grand_total = total_balance['Total Balance'].sum() - total_balance['Total Balance']['KARTU KREDIT']
     total_balance['Total Balance (%)'] = total_balance['Total Balance'].map(lambda x: x/grand_total)
  
+    total_balance.plot.pie(y='Total Balance', figsize=(5,5), autopct='%1.0f%%', startangle=60, explode=(0.05, 0.05, 0.05, 0.05))
+    plt.savefig(os.getenv("TOTAL_BALANCE_PLOT_PATH"))
+
     total_balance['Total Balance'] = total_balance['Total Balance'].map("Rp{:,}".format)
     total_balance['Total Balance (%)'] = total_balance['Total Balance (%)'].map("{:.2%}".format)
     dfi.export(total_balance, os.getenv("TOTAL_BALANCE_PATH"))

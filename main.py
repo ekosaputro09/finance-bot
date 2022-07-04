@@ -58,6 +58,7 @@ def see_balance(update, context):
 def see_total_balance(update, context):
     grand_total = accounts.see_total_balance()
     update.message.reply_photo(open(os.getenv("TOTAL_BALANCE_PATH"), "rb"))
+    update.message.reply_photo(open(os.getenv("TOTAL_BALANCE_PLOT_PATH"), "rb"))
     update.message.reply_text("Grand Total = Rp{:,}".format(int(grand_total)))
 
 
