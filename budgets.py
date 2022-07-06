@@ -26,12 +26,11 @@ def update_budget(transaction):
     category1, category2 = trx_data['Category1'], trx_data['Category2']
     amount = trx_data['Amount']
 
-    subcat = worksheet.find(category2)
+    subcat = worksheet.find(category2).row
+    this_month = worksheet.find('{0:%B} {0:%Y}'.format(datetime.now())).col
 
-    if trx_data['Type'] == "Pengeluaran":
-        worksheet.update_cell(subcat.row, subcat.col+2, int(worksheet.cell(subcat.row, subcat.col+2).value) + int(amount))
-    elif trx_data['Type'] == "Pemasukan":
-        worksheet.update_cell(subcat.row, subcat.col+2, int(worksheet.cell(subcat.row, subcat.col+2).value) + int(amount))
+    if trx_data['Type'] != "Transfer":
+        worksheet.update_cell(subcat, this_month, int(worksheet.cell(subcat, this_month).value) + int(amount))
 
 
 def list_category():
