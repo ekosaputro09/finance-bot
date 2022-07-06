@@ -28,9 +28,9 @@ def update_budget(transaction):
 
     subcat = worksheet.find(category2)
 
-    if trx_data["Type"] == "Pengeluaran":
+    if trx_data['Type'] == "Pengeluaran":
         worksheet.update_cell(subcat.row, subcat.col+2, int(worksheet.cell(subcat.row, subcat.col+2).value) + int(amount))
-    elif trx_data["Type"] == "Pemasukan":
+    elif trx_data['Type'] == "Pemasukan":
         worksheet.update_cell(subcat.row, subcat.col+2, int(worksheet.cell(subcat.row, subcat.col+2).value) + int(amount))
 
 
