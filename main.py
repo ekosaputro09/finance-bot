@@ -70,6 +70,11 @@ def list_category(update, context):
     update.message.reply_photo(open(os.getenv("CATEGORIES_PATH"), "rb"))
 
 
+def invsout(update, context):
+    budgets.invsout()
+    update.message.reply_photo(open(os.getenv("INVSOUT_PATH"), "rb"))
+
+
 def error_message(update, context):
     print(f"Update {update} caused error {context.error}")
 
@@ -85,6 +90,7 @@ def main():
     dp.add_handler(CommandHandler("balance", see_balance))
     dp.add_handler(CommandHandler("total_balance", see_total_balance))
     dp.add_handler(CommandHandler("categories", list_category))
+    dp.add_handler(CommandHandler("invsout", invsout))
 
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 

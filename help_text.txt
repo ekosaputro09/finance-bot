@@ -4,3 +4,4 @@ Please type:
 /balance       -> to see the updated account balance
 /total_balance -> to see total balance of each account type
 /categories    -> to see the list of categories
+/invsout       -> to see current in vs out balance

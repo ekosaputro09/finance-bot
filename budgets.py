@@ -36,3 +36,18 @@ def list_category():
 
     categories = pd.DataFrame(worksheet.get(os.getenv("CATEGORY_DATARANGE")), columns=json.loads(os.getenv("CATEGORY_COLUMNS")))
     dfi.export(categories, os.getenv("CATEGORIES_PATH"))
+
+
+def invsout():
+
+    this_month_col = worksheet.find('{0:%B} {0:%Y}'.format(datetime.now())).col
+
+    data = pd.DataFrame(worksheet.get_all_values())    
+    data = data[[0,this_month_col-1]]
+    data.drop(labels=0, axis=0, inplace=True)
+    data.rename(columns={0:'Type', this_month_col-1:'Amount'}, inplace=True)
+    data['Amount'] = data['Amount'].astype(int)
+
+    invsout = data.groupby("Type").sum()
+    invsout['Amount'] = invsout['Amount'].map("Rp{:,}".format)
+    dfi.export(invsout, os.getenv("INVSOUT_PATH"))
