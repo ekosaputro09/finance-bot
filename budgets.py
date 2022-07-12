@@ -26,10 +26,9 @@ def update_budget(transaction):
     category1, category2 = trx_data['Category1'], trx_data['Category2']
     amount = trx_data['Amount']
 
-    subcat = worksheet.find(category2).row
-    this_month = worksheet.find('{0:%B} {0:%Y}'.format(datetime.now())).col
-
     if trx_data['Type'] != "Transfer":
+        subcat = worksheet.find(category2).row
+        this_month = worksheet.find('{0:%B} {0:%Y}'.format(datetime.now())).col
         worksheet.update_cell(subcat, this_month, int(worksheet.cell(subcat, this_month).value) + int(amount))
 
 
