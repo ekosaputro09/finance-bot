@@ -45,9 +45,12 @@ def transactions(update, context):
     else:
         transaction = (' ').join(str(i) for i in transaction).split('#')
         worksheet.append_row(transaction)
-        accounts.update_balance(transaction)
-        budgets.update_budget(transaction)
-        update.message.reply_text("Transaction has been recorded")
+        try:
+            accounts.update_balance(transaction)
+            budgets.update_budget(transaction)
+            update.message.reply_text("Transaction has been recorded")
+        except:
+            update.message.reply_text("Something is Wrong. Please check!")
 
 
 def see_balance(update, context):
