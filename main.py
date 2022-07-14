@@ -5,8 +5,11 @@
 import os
 import json
 import gspread
+import pandas as pd
+import dataframe_image as dfi
 from telegram import *
 from telegram.ext import *
+from datetime import datetime
 from dotenv import load_dotenv
 import accounts
 import budgets
@@ -53,6 +56,31 @@ def transactions(update, context):
             update.message.reply_text("Something is Wrong. Please check!")
 
 
+def search_transactions(update, context):
+
+    queries = context.args[:]
+    if len(queries) < 1:
+        update.message.reply_text("Please type:\n/search_trx %s \n\nexample:\n/search_trx %s"
+                                % ("column_name(Type,Date,Account,Amount,Category1,Category2,Notes)#query#last trx amount",
+                                    "Account#Dompet Novi#10"))
+    else:
+        queries = (' ').join(i for i in queries).split('#')
+        col_name, query, length = str(queries[0]), str(queries[1]), int(queries[2])
+
+        trx = pd.DataFrame(worksheet.get_all_values(), columns=json.loads(os.getenv("TRANSACTION_COLUMNS")))
+        trx.drop(labels=0, axis=0, inplace=True)
+        trx.query("%s == @query" % col_name, inplace=True)
+        trx['Date'] = trx['Date'].map(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M'))
+        trx.sort_values(by=['Date'], ascending=False, inplace=True)
+        trx.reset_index(drop=True, inplace=True)
+        if len(trx) >= length:
+            trx = trx[:length]
+        else:
+            trx
+        dfi.export(trx, os.getenv("TRANSACTION_PATH"))
+        update.message.reply_photo(open(os.getenv("TRANSACTION_PATH"), "rb"))
+
+
 def see_balance(update, context):
     accounts.see_balance()
     update.message.reply_photo(open(os.getenv("BALANCE_PATH"), "rb"))
@@ -87,6 +115,7 @@ def main():
     dp.add_handler(CommandHandler("start", start_command))
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("input_trx", transactions))
+    dp.add_handler(CommandHandler("search_trx", search_transactions))
     dp.add_handler(CommandHandler("balance", see_balance))
     dp.add_handler(CommandHandler("total_balance", see_total_balance))
     dp.add_handler(CommandHandler("categories", list_category))

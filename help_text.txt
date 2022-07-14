@@ -1,6 +1,7 @@
 Please type:
 
 /input_trx     -> to get format and sample of adding a transaction
+/search_trx    -> to search n last transactions
 /balance       -> to see the updated account balance
 /total_balance -> to see total balance of each account type
 /categories    -> to see the list of categories
