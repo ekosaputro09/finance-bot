@@ -24,11 +24,12 @@ def update_budget(transaction):
     trx_data = dict(zip(trx_columns, transaction))
 
     category1, category2 = trx_data['Category1'], trx_data['Category2']
+    date = trx_data['Date']
     amount = trx_data['Amount']
 
     if trx_data['Type'] != "Transfer":
         subcat = worksheet.find(category2).row
-        this_month = worksheet.find('{0:%B} {0:%Y}'.format(datetime.now())).col
+        this_month = worksheet.find('{0:%B} {0:%Y}'.format(datetime.strptime(date, '%Y-%m-%d %H:%M'))).col
         worksheet.update_cell(subcat, this_month, int(worksheet.cell(subcat, this_month).value) + int(amount))
 
 
