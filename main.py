@@ -47,6 +47,7 @@ def transactions(update, context):
                                   "Pengeluaran#2022-01-01 10:00#Dompet Novi#50000#Makan Minum#Jajan#es krim"))
     else:
         transaction = (' ').join(str(i) for i in transaction).split('#')
+        transaction[3] = int(transaction[3])
         worksheet.append_row(transaction)
         try:
             accounts.update_balance(transaction)
