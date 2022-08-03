@@ -8,6 +8,8 @@ import json
 import gspread
 import pandas as pd
 import dataframe_image as dfi
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from datetime import datetime
 from dotenv import load_dotenv
