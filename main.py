@@ -58,12 +58,11 @@ def transactions(update, context):
 
 
 def search_transactions(update, context):
-
     queries = context.args[:]
     if len(queries) < 1:
         update.message.reply_text("Please type:\n/search_trx %s \n\nexample:\n/search_trx %s"
-                                % ("column_name(Type,Date,Account,Amount,Category1,Category2,Notes)#query#last trx amount",
-                                    "Account#Dompet Novi#10"))
+                               % ("column_name(Type,Date,Account,Amount,Category1,Category2,Notes)#query#last trx amount",
+                                  "Account#Dompet Novi#10"))
     else:
         queries = (' ').join(i for i in queries).split('#')
         col_name, query, length = str(queries[0]), str(queries[1]), int(queries[2])
@@ -104,6 +103,19 @@ def invsout(update, context):
     update.message.reply_photo(open(os.getenv("INVSOUT_PATH"), "rb"))
 
 
+def expense_details(update, context):
+    period = context.args[:]
+    if len(period) < 1:
+        update.message.reply_text("Please type:\n/expense %s \n\nexample:\n/expense %s"
+                               % ("month-year", "07-22"))
+    else:
+        date = "01-" + ('').join(period)
+        period = '{0:%B} {0:%Y}'.format(datetime.strptime(date, '%d-%m-%y'))
+        budgets.expense(period)
+        update.message.reply_photo(open(os.getenv("REVENUES_PATH"), "rb"))
+        update.message.reply_photo(open(os.getenv("EXPENSES_PATH"), "rb"))
+
+
 def error_message(update, context):
     print(f"Update {update} caused error {context.error}")
 
@@ -121,6 +133,7 @@ def main():
     dp.add_handler(CommandHandler("total_balance", see_total_balance))
     dp.add_handler(CommandHandler("categories", list_category))
     dp.add_handler(CommandHandler("invsout", invsout))
+    dp.add_handler(CommandHandler("expense", expense_details))
 
     dp.add_handler(MessageHandler(Filters.text, handle_message))
 

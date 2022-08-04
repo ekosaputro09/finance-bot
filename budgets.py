@@ -56,3 +56,28 @@ def invsout():
     for column in column_name:
         invsout[column] = invsout[column].map("Rp{:,}".format)
     dfi.export(invsout, os.getenv("INVSOUT_PATH"))
+
+
+def expense(period):
+
+    data = pd.DataFrame(worksheet.get_all_values())
+    data.rename(columns=data.iloc[0], inplace=True)
+    data.drop(labels=0, axis=0, inplace=True)
+
+    data = data[json.loads(os.getenv("CATEGORY_COLUMNS")) + [period]]
+    data[period] = data[period].astype(int)
+
+    expenses = data[data['Type'] == "Pengeluaran"]
+    revenues = data[data['Type'] == "Pemasukan"]
+
+    expenses.sort_values(by=period, ascending=False, inplace=True)
+    expenses.reset_index(drop=True, inplace=True)
+    expenses.drop(columns=["Type"], inplace=True)
+    expenses[period] = expenses[period].map("Rp{:,}".format)
+    dfi.export(expenses, os.getenv("EXPENSES_PATH"))
+
+    revenues.sort_values(by=period, ascending=False, inplace=True)
+    revenues.reset_index(drop=True, inplace=True)
+    revenues.drop(columns=["Type"], inplace=True)
+    revenues[period] = revenues[period].map("Rp{:,}".format)
+    dfi.export(revenues, os.getenv("REVENUES_PATH"))

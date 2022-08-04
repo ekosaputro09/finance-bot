@@ -6,3 +6,4 @@ Please type:
 /total_balance -> to see total balance of each account type
 /categories    -> to see the list of categories
 /invsout       -> to see current in vs out balance
+/expense       -> to see detail of expenses
