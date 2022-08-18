@@ -5,6 +5,7 @@
 import os
 import json
 import gspread
+import traceback
 import pandas as pd
 import dataframe_image as dfi
 from telegram import *
@@ -54,6 +55,7 @@ def transactions(update, context):
             budgets.update_budget(transaction)
             update.message.reply_text("Transaction has been recorded")
         except:
+            traceback.print_exc()
             update.message.reply_text("Something is Wrong. Please check!")
 
 
