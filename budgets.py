@@ -36,7 +36,7 @@ def update_budget(transaction):
 def list_category():
 
     categories = pd.DataFrame(worksheet.get(os.getenv("CATEGORY_DATARANGE")), columns=json.loads(os.getenv("CATEGORY_COLUMNS")))
-    dfi.export(categories, os.getenv("CATEGORIES_PATH"))
+    dfi.export(categories, os.getenv("CATEGORIES_PATH"), table_conversion="matplotlib")
 
 
 def invsout():
@@ -55,7 +55,7 @@ def invsout():
     invsout = data.groupby("Type").sum()
     for column in column_name:
         invsout[column] = invsout[column].map("Rp{:,}".format)
-    dfi.export(invsout, os.getenv("INVSOUT_PATH"))
+    dfi.export(invsout, os.getenv("INVSOUT_PATH"), table_conversion="matplotlib")
 
 
 def expense(period):
@@ -74,10 +74,10 @@ def expense(period):
     expenses.reset_index(drop=True, inplace=True)
     expenses.drop(columns=["Type"], inplace=True)
     expenses[period] = expenses[period].map("Rp{:,}".format)
-    dfi.export(expenses, os.getenv("EXPENSES_PATH"))
+    dfi.export(expenses, os.getenv("EXPENSES_PATH"), table_conversion="matplotlib")
 
     revenues.sort_values(by=period, ascending=False, inplace=True)
     revenues.reset_index(drop=True, inplace=True)
     revenues.drop(columns=["Type"], inplace=True)
     revenues[period] = revenues[period].map("Rp{:,}".format)
-    dfi.export(revenues, os.getenv("REVENUES_PATH"))
+    dfi.export(revenues, os.getenv("REVENUES_PATH"), table_conversion="matplotlib")

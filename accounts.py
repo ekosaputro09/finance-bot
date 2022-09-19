@@ -55,7 +55,7 @@ def see_balance():
     balance = pd.DataFrame(worksheet.get(os.getenv("ACCOUNT_DATARANGE")), columns=json.loads(os.getenv("ACCOUNT_COLUMNS")))
     balance.drop(columns=['AccountType', 'InitialBalance'], axis=1, inplace=True)
     balance['CurrentBalance'] = balance['CurrentBalance'].map(lambda x: "Rp{:,}".format(int(x)))
-    dfi.export(balance, os.getenv("BALANCE_PATH"))
+    dfi.export(balance, os.getenv("BALANCE_PATH"), table_conversion="matplotlib")
 
 
 def see_total_balance():
@@ -73,6 +73,6 @@ def see_total_balance():
 
     total_balance['TotalBalance'] = total_balance['TotalBalance'].map("Rp{:,}".format)
     total_balance['TotalBalance (%)'] = total_balance['TotalBalance (%)'].map("{:.2%}".format)
-    dfi.export(total_balance, os.getenv("TOTAL_BALANCE_PATH"))
+    dfi.export(total_balance, os.getenv("TOTAL_BALANCE_PATH"), table_conversion="matplotlib")
 
     return grand_total

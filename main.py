@@ -79,7 +79,7 @@ def search_transactions(update, context):
             trx = trx[:length]
         else:
             trx
-        dfi.export(trx, os.getenv("TRANSACTION_PATH"))
+        dfi.export(trx, os.getenv("TRANSACTION_PATH"), table_conversion="matplotlib")
         update.message.reply_photo(open(os.getenv("TRANSACTION_PATH"), "rb"))
 
 
