@@ -120,6 +120,7 @@ def expense_details(update, context):
 
 def error_message(update, context):
     print(f"Update {update} caused error {context.error}")
+    update.message.reply_text(f"Oops, there is an error: \n{context.error}")
 
 
 def main():
