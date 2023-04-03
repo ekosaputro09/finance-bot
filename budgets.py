@@ -43,11 +43,14 @@ def invsout():
 
     months = json.loads(os.getenv("MONTHS"))
     years = json.loads(os.getenv("YEARS"))
-    column_name = [month + " " + year for month in months for year in years]
 
     data = pd.DataFrame(worksheet.get_all_values())
     data.rename(columns=data.iloc[0], inplace=True)
     data.drop(labels=0, axis=0, inplace=True)
+    data_columns = list(set(data.columns))
+
+    column_name = [month + " " + year for month in months for year in years]
+    column_name = [column for column in column_name if column in data_columns]
 
     data = data[['Type'] + column_name]
     data[column_name] = data[column_name].astype(int)
