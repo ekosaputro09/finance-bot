@@ -4,7 +4,10 @@ FROM python:3.8
 # set working directory
 WORKDIR /app
 
-# create folder media
+# create folder media# install Cron and Nano
+RUN apt-get update
+RUN apt-get -y install nano
+
 RUN mkdir media
 
 # copy the dependencies file to the working directory
