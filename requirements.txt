@@ -67,7 +67,7 @@ traitlets==5.3.0
 typing_extensions==4.2.0
 tzdata==2022.1
 tzlocal==4.2
-urllib3==1.26.9
+urllib3>=1.26.18
 webencodings==0.5.1
 yarl==1.7.2
 zipp==3.8.0
