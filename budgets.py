@@ -45,8 +45,8 @@ def invsout():
     years = json.loads(os.getenv("YEARS"))
 
     data = pd.DataFrame(worksheet.get_all_values())
-    data.rename(columns=data.iloc[0], inplace=True)
-    data.drop(labels=0, axis=0, inplace=True)
+    data.columns=data.iloc[2].tolist()
+    data.drop(labels=[0,1,2], axis=0, inplace=True)
     data_columns = list(set(data.columns))
 
     column_name = [month + " " + year for month in months for year in years]
@@ -64,8 +64,8 @@ def invsout():
 def expense(period):
 
     data = pd.DataFrame(worksheet.get_all_values())
-    data.rename(columns=data.iloc[0], inplace=True)
-    data.drop(labels=0, axis=0, inplace=True)
+    data.columns=data.iloc[2].tolist()
+    data.drop(labels=[0,1,2], axis=0, inplace=True)
 
     data = data[json.loads(os.getenv("CATEGORY_COLUMNS")) + [period]]
     data[period] = data[period].astype(int)
