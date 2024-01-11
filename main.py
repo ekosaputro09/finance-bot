@@ -52,7 +52,7 @@ def transactions(update, context):
         worksheet.append_row(transaction)
         try:
             accounts.update_balance(transaction)
-            budgets.update_budget(transaction)
+            # budgets.update_budget(transaction)
             update.message.reply_text("Transaction has been recorded")
         except:
             traceback.print_exc()
