@@ -53,7 +53,7 @@ def update_balance(transaction):
 def see_balance():
 
     balance = pd.DataFrame(worksheet.get(os.getenv("ACCOUNT_DATARANGE")), columns=json.loads(os.getenv("ACCOUNT_COLUMNS")))
-    balance.drop(columns=['AccountType', 'InitialBalance'], axis=1, inplace=True)
+    balance.drop(columns=['AccountType', 'InitialBalance', 'Income', 'InTransfer', 'AllIncomes', 'Expense', 'OutTransfer', 'AllExpenses'], axis=1, inplace=True)
     balance['CurrentBalance'] = balance['CurrentBalance'].map(lambda x: "Rp{:,}".format(int(x)))
     dfi.export(balance, os.getenv("BALANCE_PATH"), table_conversion="matplotlib")
 
@@ -67,7 +67,7 @@ def see_total_balance():
     total_balance["TotalBalance"] = total_balance["TotalBalance"].map(lambda x: x*(-1) if x < 0 else x*1)
     grand_total = total_balance['TotalBalance'].sum() - total_balance['TotalBalance']['KARTU KREDIT']
     total_balance['TotalBalance (%)'] = total_balance['TotalBalance'].map(lambda x: x/grand_total)
- 
+
     total_balance.plot.pie(y='TotalBalance', figsize=(5,5), autopct='%1.0f%%', startangle=60, explode=(0.05, 0.05, 0.05, 0.05))
     plt.savefig(os.getenv("TOTAL_BALANCE_PLOT_PATH"))
 

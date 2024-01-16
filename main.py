@@ -49,9 +49,11 @@ def transactions(update, context):
     else:
         transaction = (' ').join(str(i) for i in transaction).split('#')
         transaction[3] = int(transaction[3])
-        worksheet.append_row(transaction)
+        last_row = worksheet.findall("2100-01-01 01:00")[0].row
+        worksheet.update('A%s' % str(last_row), [transaction])
+        # worksheet.append_row(transaction)
         try:
-            accounts.update_balance(transaction)
+            # accounts.update_balance(transaction)
             # budgets.update_budget(transaction)
             update.message.reply_text("Transaction has been recorded")
         except:
